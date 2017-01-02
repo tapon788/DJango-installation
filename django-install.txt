@@ -1,0 +1,167 @@
+install pip
+Download get-pip.py, being careful to save it as a .py file rather than .txt. Then, run it from the command prompt:
+
+python get-pip.py
+python -m pip install -U pip
+
+Installing a Python Virtual Environment
+pip install virtualenv 
+virtualenv D:\env_mysite 
+
+To use this new Python virtual environment, we have to activate it, so let’s go back to the command prompt and type the following:
+
+env_mysite\scripts\activate 
+You will notice your command prompt has now changed:
+
+(env_mysite) C:\Users\nigel>
+
+Installing Django
+
+pip install django==1.8.13 
+If the installation was successful, you should be able to import the module django:
+
+(env_mysite) C:\Users\nigel>python Python 3.5.1 (v3.5.1:37a07cee5969, Dec  6 2015,
+01:38:48) [MSC v.1900 32 bit (Intel)] on win32 Type "help", "copyright", "credits"
+or "license" for more information.
+>>> import django >>> django.get_version()
+'1.8.13'
+
+django-admin startproject mysite 
+
+
+python manage.py migrate
+
+python manage.py runserver
+
+
+now if errors
+
+
+replace C:\python27\Lib\fuctools.py around line 56
+
+    convert = {
+        '__lt__': [('__gt__', lambda self, other: other < self),
+                   ('__le__', lambda self, other: not other < self),
+                   ('__ge__', lambda self, other: not self < other)],
+        '__le__': [('__ge__', lambda self, other: other <= self),
+                   ('__lt__', lambda self, other: not other <= self),
+                   ('__gt__', lambda self, other: not self <= other)],
+        '__gt__': [('__lt__', lambda self, other: other > self),
+                   ('__ge__', lambda self, other: not other > self),
+                   ('__le__', lambda self, other: not self > other)],
+        '__ge__': [('__le__', lambda self, other: other >= self),
+                   ('__gt__', lambda self, other: not other >= self),
+                   ('__lt__', lambda self, other: not self >= other)]
+    }
+
+with
+
+
+
+
+convert = {
+    '__lt__': [('__gt__', lambda self, other: not (self < other or self == other)),
+               ('__le__', lambda self, other: self < other or self == other),
+               ('__ge__', lambda self, other: not self < other)],
+    '__le__': [('__ge__', lambda self, other: not self <= other or self == other),
+               ('__lt__', lambda self, other: self <= other and not self == other),
+               ('__gt__', lambda self, other: not self <= other)],
+    '__gt__': [('__lt__', lambda self, other: not (self > other or self == other)),
+               ('__ge__', lambda self, other: self > other or self == other),
+               ('__le__', lambda self, other: not self > other)],
+    '__ge__': [('__le__', lambda self, other: (not self >= other) or self == other),
+               ('__gt__', lambda self, other: self >= other and not self == other),
+               ('__lt__', lambda self, other: not self >= other)]
+}
+
+
+
+
+
+
+templates
+
+{{ person_name }}) is a variable
+Any text that’s surrounded by curly braces and percent signs (e.g.{% if ordered_warranty %}) is a template tag.
+
+
+
+MODELS
+
+
+in settings.py
+
+# Database
+#...
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+ENGINE tells Django sqlite database engine to use
+NAME tells Django the name of your database. For example: 'NAME': 'mydb',
+
+Steps:
+1) in the directory where your manage.py file is type:
+python manage.py startapp books 
+2) In the models.py file that was created by the startapp command, enter the following:
+
+from django.db import models
+
+class Publisher(models.Model):
+    name = models.CharField(max_length=30)
+    address = models.CharField(max_length=50)
+    city = models.CharField(max_length=60)
+    state_province = models.CharField(max_length=30)
+    country = models.CharField(max_length=50)
+    website = models.URLField()
+
+class Author(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=40)
+    email = models.EmailField()
+
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    authors = models.ManyToManyField(Author)
+    publisher = models.ForeignKey(Publisher)
+    publication_date = models.DateField()
+
+
+3) To register our “books” app, add 'books' to INSTALLED_APPS,
+INSTALLED_APPS = (
+'django.contrib.admin',
+'django.contrib.auth',
+'django.contrib.contenttypes',
+'django.contrib.sessions',
+'django.contrib.messages',
+'django.contrib.staticfiles',
+'books',
+)
+python manage.py check -> validate the models
+python manage.py makemigrations books -> django's way of creating a file 0001_initial.py
+python manage.py sqlmigrate books 0001 ->  prints what SQL Django would execute if you asked it
+python manage.py migrate -> COMMIT
+
+Basic Data Access
+python manage.py shell 
+
+Insert:
+>>> p1 = Publisher(name='Apress', address='2855 Telegraph Avenue',city='Berkeley', state_province='CA', country='U.S.A.',website='http://www.apress.com/')
+>>> p1.save()
+Select *:
+>>> publisher_list = Publisher.objects.all()
+>>> publisher_list
+[<Publisher: Publisher object>, <Publisher: Publisher object>]
+Filter:
+>>> Publisher.objects.filter(country="U.S.A.",
+state_province="CA")
+[<Publisher: Apress>]
+>>> Publisher.objects.filter(name__contains="press")
+[<Publisher: Apress>]
+
+Retrieving Single Objects:
+>>> Publisher.objects.get(name="Apress")
+<Publisher: Apress>
