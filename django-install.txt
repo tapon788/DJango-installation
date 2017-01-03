@@ -79,11 +79,39 @@ convert = {
 
 
 
-templates
+templates 
+----------
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            # ... some options here ...
+        },
+    },
+]
+BACKEND ->	is a dotted Python path to a template engine class 
+			implementing Django’s template backend API
+DIRS    -> 	where the engine should look for template source files
+APP_DIRS -> tells whether the engine should look for templates inside 
+			installed applications (subdirectory in each of the INSTALLED_APPS)
+OPTIONS  ->	contains backend-specific settings.
 
-{{ person_name }}) is a variable
-Any text that’s surrounded by curly braces and percent signs (e.g.{% if ordered_warranty %}) is a template tag.
+If you want to have a set of master templates at project root, 
+e.g. mysite/templates, you do need to set DIRS, like so:
+	
+	'DIRS': [os.path.join(BASE_DIR, 'templates')],
 
+
+(Appendix E contains the full list of tags and filters)
+a tag just tells the template system to “do something”
+	1)   {{ person_name }}) is a variable
+	2)	 Any text that’s surrounded by curly braces and percent signs 
+		(e.g.{% if ordered_warranty %}) is a template tag.
+	3)	{{ ship_date|date:"F j, Y" }}
+		passing the ship_date variable to the date filter, 
+		giving the date filter the argument "F j, Y"
 
 
 MODELS
@@ -151,6 +179,8 @@ python manage.py shell
 Insert:
 >>> p1 = Publisher(name='Apress', address='2855 Telegraph Avenue',city='Berkeley', state_province='CA', country='U.S.A.',website='http://www.apress.com/')
 >>> p1.save()
+>>> p2 = Publisher(name="O'Reilly", address='10 Fawcett St.',city='Cambridge', state_province='MA', country='U.S.A.',website='http://www.oreilly.com/')
+>>> p2.save()
 Select *:
 >>> publisher_list = Publisher.objects.all()
 >>> publisher_list
@@ -165,3 +195,18 @@ state_province="CA")
 Retrieving Single Objects:
 >>> Publisher.objects.get(name="Apress")
 <Publisher: Apress>
+
+Admin site
+python manage.py createsuperuser
+	give user,email and password
+Access at: 127.0.0.1:PORT/admin/
+
+Adding Models to Django Admin
+in admin.py at books app
+
+from .models import Publisher, Author, Book
+
+admin.site.register(Publisher)
+admin.site.register(Author)
+admin.site.register(Book)
+
