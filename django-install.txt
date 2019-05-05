@@ -1,5 +1,8 @@
 ISSUES
 -------
+An Alternative
+pip install mysqlclient==1.3.4
+
 1) 	Must use Python 2.7 as we are going to use MySQLDB
 2)	Must add your python.exe,virtualenv.exe and pip.exe path to environment variables.
 		E.g.
@@ -117,7 +120,7 @@ TEMPLATES = [
     },
 ]
 BACKEND ->	is a dotted Python path to a template engine class 
-			implementing Djangoís template backend API
+			implementing Django‚Äôs template backend API
 DIRS    -> 	where the engine should look for template source files
 APP_DIRS -> tells whether the engine should look for templates inside 
 			installed applications (subdirectory in each of the INSTALLED_APPS)
@@ -130,9 +133,9 @@ e.g. mysite/templates, you do need to set DIRS, like so:
 
 
 (Appendix E contains the full list of tags and filters)
-a tag just tells the template system to ìdo somethingî
+a tag just tells the template system to ‚Äúdo something‚Äù
 	1)   {{ person_name }}) is a variable
-	2)	 Any text thatís surrounded by curly braces and percent signs 
+	2)	 Any text that‚Äôs surrounded by curly braces and percent signs 
 		(e.g.{% if ordered_warranty %}) is a template tag.
 	3)	{{ ship_date|date:"F j, Y" }}
 		passing the ship_date variable to the date filter, 
@@ -183,7 +186,7 @@ class Book(models.Model):
     publication_date = models.DateField()
 
 
-3) To register our ìbooksî app, add 'books' to INSTALLED_APPS,
+3) To register our ‚Äúbooks‚Äù app, add 'books' to INSTALLED_APPS,
 INSTALLED_APPS = (
 'django.contrib.admin',
 'django.contrib.auth',
